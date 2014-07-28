@@ -1,0 +1,12 @@
+{
+  "name": "signup",
+  "description": "user registration web page and Node.js server",
+  "author": "Daniel Howard <dan_howard@svexpertise.com>",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": ">= 4.0.0",
+    "connect": ">= 2.14.0",
+    "body-parser": ">= 1.0.0",
+    "jade": ">= 1.3.0"
+  }
+}
