@@ -15,14 +15,19 @@ app.set('view engine', 'jade');
 app.use(express.static(require('path').join(__dirname, '../client')));
 app.use(bodyParser.json());
 
-// redirect / to /signup form
+// show the app page using Jade
 app.get('/', function(req, res) {
-  res.redirect('/signup');
+  res.render('app');
 });
 
 // render signup page using Jade
 app.get('/signup', function(req, res) {
   res.render('signup');
+});
+
+//render signup thanks page using Jade
+app.get('/signup/thanks', function(req, res) {
+  res.render('thanks');
 });
 
 // hardcoded database
@@ -33,7 +38,7 @@ var db = [
 ];
 
 // target for form submit
-app.post('/user', function(req, response) {
+app.post('/user', function(req, res) {
   var first = req.body.first;
   var last = req.body.last;
   var email = req.body.email;
@@ -56,10 +61,10 @@ app.post('/user', function(req, response) {
   } else if (password !== verification) {
     error = 'Passwords don\'t match';
   }
-  
+
   if (error) {
-    response.status(403);
-    response.render('signup', {
+    res.status(403);
+    res.render('signup', {
       error: error
     });
     return
@@ -67,16 +72,15 @@ app.post('/user', function(req, response) {
 
   // check if username is already taken
   for (var i = 0; i < db.length; i++) {
-    if ((db[i].first === first) && (db[i].last === last)) {
-      response.status(403);
-      response.render('signup', {
-        error: 'You have already signed up'
+    if (db[i].email === email) {
+      res.status(403).jsonp({
+        alreadySignedUp: true
       });
       return;
     }
   }
 
-  // create the user
+  // create user
   var user = {
     first: first,
     last: last,
@@ -84,8 +88,16 @@ app.post('/user', function(req, response) {
     createdAt: Date.now()
   };
 
-  // send the user back (for now)
-  response.status(200).jsonp(user);
+  // TODO store user
+
+  // move to next page
+  var next = {
+    user: user,
+    location: 'thanks'    
+  };
+
+  // show the 'thanks' page 
+  res.status(200).jsonp(next);
 });
 
 http.listen(3000, function(){
