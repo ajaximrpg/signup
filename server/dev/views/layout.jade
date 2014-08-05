@@ -6,7 +6,12 @@ html(ng-app="signupApp")
     link(rel='stylesheet', href='/css/bootstrap.min.css')
     link(rel='stylesheet', href='/css/halflings.css')
     link(rel='stylesheet', href='/css/signup.css')
+    if test
+      link(rel='stylesheet', href='/css/qunit/qunit-1.14.0.css')
   body
+    if test
+      div(id="qunit")
+      div(id="qunit-fixture")
     div.container
       block content
     script(src='/js/jquery.min.js')
@@ -16,3 +21,6 @@ html(ng-app="signupApp")
     script(src='/js/md5.min.js')
     script(src='/js/signup.js')
     script(src='/js/thanks.js')
+    if test
+      script(src='/js/qunit/qunit-1.14.0.js')
+      script(src='/js/qunit/tests/signup.js')

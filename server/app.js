@@ -15,19 +15,24 @@ app.set('view engine', 'jade');
 app.use(express.static(require('path').join(__dirname, '../client')));
 app.use(bodyParser.json());
 
+// TODO use get()/set() or some other more elegant strategy
+var conf = {
+  test: true
+};
+
 // show the app page using Jade
 app.get('/', function(req, res) {
-  res.render('app');
+  res.render('app', conf);
 });
 
 // render signup page using Jade
 app.get('/signup', function(req, res) {
-  res.render('signup');
+  res.render('signup', conf);
 });
 
 //render signup thanks page using Jade
 app.get('/signup/thanks', function(req, res) {
-  res.render('thanks');
+  res.render('thanks', conf);
 });
 
 // hardcoded database
