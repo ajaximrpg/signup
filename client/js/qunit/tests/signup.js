@@ -1,5 +1,5 @@
 // create test bed
-var injector = angular.injector(['ng', 'signupApp']);
+var injector = angular.injector(['ng', 'ngMock', 'signupApp']);
 
 var init = {
   setup: function() {
@@ -9,15 +9,19 @@ var init = {
 
 module('tests', init);
 
-// this test passes but it doesn't test the controller
+// test the 'match' directive
 QUnit.test('match', function() {
-  var html = '<div><input id="password" ng-model="password" match="verification"></input><input id="verification" ng-model="verification" match="password"></input></div>';
+  var html = '<form id="myform" name="signupController" ng-controller="signupController"><input id="password" ng-model="password" match="verification"></input><input id="verification" ng-model="verification" match="password"></input></form>';
   var $compile = injector.get('$compile');
   var element = $compile(html)(this.$scope);
   this.$scope.password = 'passw0rd';
   this.$scope.verification = 'passw0rd';
   this.$scope.$apply();
-  equal(element.$valid);
+  ok(element.scope().signupController.$valid, '$valid is false');
+  this.$scope.password = 'passw0rd';
+  this.$scope.verification = 'passw0rd2';
+  this.$scope.$apply();
+  ok(!element.scope().signupController.$valid, '$valid is true when it should be false');
   delete this.$scope.foo;
 });
 
